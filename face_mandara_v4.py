@@ -25,7 +25,6 @@ for k in datas:
     face_image_names.append(k)
     face_vectors.append(datas[k])
 face_vectors = np.array(face_vectors).astype("float32")
-print("indexing is end")
 
 # faissを用いた
 nlist = 100
@@ -36,6 +35,7 @@ quantizer = faiss.IndexFlatL2(d)  # this remains the same
 index = faiss.IndexIVFPQ(quantizer, d, nlist, m, 8)
 index.train(face_vectors)
 index.add(face_vectors)
+print("indexing is end")
 
 
 def get_distance(a, b):
