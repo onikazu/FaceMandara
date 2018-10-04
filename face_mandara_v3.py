@@ -7,12 +7,31 @@ import cv2
 import face_recognition
 import dlib
 import numpy as np
+import faiss
 
 
 # databaseの読み込み
 datas = {}
 with open('mini_data.pickle', mode='rb') as f:
     datas = pickle.load(f)
+# databese配列の作成
+face_image_names = []
+face_vectors = []
+for k in datas:
+    face_image_names.append(k)
+    face_vectors.append(datas[k])
+face_vectors = np.array(face_vectors).astype("float32")
+
+# faissを用いた
+nlist = 100
+m = 8
+k = 9 # 類似顔8こほしいので
+d = 128 # 顔特徴ベクトルの次元数
+quantizer = faiss.IndexFlatL2(d)  # this remains the same
+index = faiss.IndexIVFPQ(quantizer, d, nlist, m, 8)
+index.train(face_vectors)
+index.add(face_vectors)
+
 
 
 def get_distance(a, b):
@@ -73,46 +92,16 @@ def recommend_faces(similar_paths_manager, frame_manager):
         except IndexError:
             continue
 
-        similar_vecs = []
+        target_vector = np.array(list(target_image_encoded)).astype("float32")
+        target_vector.resize((1, 128))
+
         similar_paths = []
-        similar_distances = []
+        D, I = index.search(target_vector, k)
+        for i in range(1, len(I[0])):
+            similar_paths.append(face_image_names[I[0][i]])
+        print("I", I)
+        print(similar_paths)
 
-        i = 0
-        for k in datas:
-            distance = get_distance(datas[k], list(target_image_encoded))
-            # 最初
-            if i == 0:
-                similar_distances.append(distance)
-                similar_paths.append(k)
-                similar_vecs.append(datas[k])
-                i += 1
-            for j in range(len(similar_distances)):
-                # 10個以上
-                if len(similar_distances) >= 10:
-                    # より近い
-                    if similar_distances[j] > distance:
-                        similar_distances.insert(j, distance)
-                        similar_paths.insert(j, k)
-                        similar_vecs.insert(j, datas[k])
-                        del similar_distances[-1]
-                        del similar_paths[-1]
-                        del similar_vecs[-1]
-                        break
-                # 10個以下
-                else:
-                    if similar_distances[j] > distance:
-                        similar_distances.insert(j, distance)
-                        similar_paths.insert(j, k)
-                        similar_vecs.insert(j, datas[k])
-                        break
-                    if j == len(similar_distances) - 1:
-                        similar_distances.append(distance)
-                        similar_paths.append(k)
-                        similar_vecs.append(datas[k])
-
-            # print("{0}:{1}".format(k, distance))
-            # print("number{} is end".format(i))
-            i += 1
         print("finish about one face")
         similar_paths_manager[:] = []
         similar_paths_manager.append(similar_paths)

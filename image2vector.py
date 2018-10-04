@@ -24,6 +24,7 @@ for image_file in trimmed_images:
     if not rects:
         continue
     face_encoding = face_recognition.face_encodings(image)[0]
+    print(len(face_encoding.tolist()))
     vector_images[image_file.split("/")[-1]] = face_encoding.tolist()
 
     if data_num == 10000:
