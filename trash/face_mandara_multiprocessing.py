@@ -45,7 +45,10 @@ def recommend_faces(conn):
     カメラ映像から取得した人物の類似顔を探し出す関数
     """
     while True:
-        frame = conn.recv()
+        if conn.poll():
+            frame = conn.recv()
+        else:
+            continue
         # 顔認識
         detector = dlib.get_frontal_face_detector()
 
@@ -239,11 +242,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-

@@ -42,20 +42,23 @@ def recommend_faces(similar_paths_manager, frame_manager):
     カメラ映像から取得した人物の類似顔を探し出す関数
     """
     while True:
-        print(frame_manager)
+        # frame manager が送られてきていなければcontinue
         if not frame_manager:
             continue
-        frame = np.ndarray(frame_manager[:])
-        # 顔認識
+
+        # numpyへの変換
+        frame = frame_manager[0]
+        frame = np.array(frame)
+
+        # 顔認識機のインスタンス
         detector = dlib.get_frontal_face_detector()
 
         # 顔データ(人数分)
         rects = detector(frame, 1)
 
-        # 顔認識できなかったとき
+        # 顔認識できなかったときcontinue
         if not rects:
             print("cant recognize faces")
-
             continue
 
         dsts = []
@@ -111,38 +114,62 @@ def recommend_faces(similar_paths_manager, frame_manager):
             # print("number{} is end".format(i))
             i += 1
         print("finish about one face")
-        similar_paths_manager = similar_paths
+        similar_paths_manager[:] = []
+        similar_paths_manager.append(similar_paths)
 
 
-def take_video(frame_manager):
-    """
-    入力データを生成する関数
-    """
-    cap = cv2.VideoCapture(0)  # 引数はカメラのデバイス番号
-    while True:
-        ret, frame = cap.read()
-        # to break the loop by pressing esc
-        frame_manager = list(frame)
-        cv2.imshow("extra", frame)
-        k = cv2.waitKey(1)
-
-        if k == 27:
-            print("released!")
-            break
-    cap.release()
-    cv2.destroyAllWindows()
-    print("release camera!!!")
-
-
+# カメラの撮影と結果表示
 if __name__ == '__main__':
     with Manager() as manager:
+        # マネージャーの作成
         similar_paths_manager = manager.list()
         frame_manager = manager.list()
 
         # プロセスの生成
-        video_process = Process(target=take_video, args=[frame_manager,], name="video")
         recommend_process = Process(target=recommend_faces, args=[similar_paths_manager, frame_manager], name="recommend")
 
         # プロセスの開始
-        video_process.start()
         recommend_process.start()
+
+        cap = cv2.VideoCapture(0)  # 引数はカメラのデバイス番号
+        while True:
+            ret, frame = cap.read()
+
+            # 配列への変換/共有メモリへの代入
+            frame_manager[:] = []
+            frame_manager.append(list(frame))
+
+            # まだ結果が出ていないなら
+            if not similar_paths_manager:
+                frame = cv2.resize(frame, (178 * 3, 218 * 3))
+                cv2.imshow("tile camera", frame)
+                k = cv2.waitKey(1)
+                if k == 27:
+                    print("released!")
+                    break
+                continue
+
+            im0 = cv2.imread("./database/{}".format(similar_paths_manager[0][0]))
+            im1 = cv2.imread("./database/{}".format(similar_paths_manager[0][1]))
+            im2 = cv2.imread("./database/{}".format(similar_paths_manager[0][2]))
+            im3 = cv2.imread("./database/{}".format(similar_paths_manager[0][3]))
+            im4 = cv2.imread("./database/{}".format(similar_paths_manager[0][4]))
+            im5 = cv2.imread("./database/{}".format(similar_paths_manager[0][5]))
+            im6 = cv2.imread("./database/{}".format(similar_paths_manager[0][6]))
+            im7 = cv2.imread("./database/{}".format(similar_paths_manager[0][7]))
+            frame = cv2.resize(frame, (178, 218))
+
+            im_tile = concat_tile([[im0, im1, im2],
+                                   [im3, frame, im4],
+                                   [im5, im6, im7]])
+            cv2.imshow('tile camera', im_tile)
+            k = cv2.waitKey(1)
+
+            if k == 27:
+                print("released!")
+                break
+        cap.release()
+        cv2.destroyAllWindows()
+        print("release camera!!!")
+
+
