@@ -1,5 +1,5 @@
 """
-faissを用いてPQ を導入
+結果表示方法の変更
 """
 
 from multiprocessing import Process, Manager, Value
@@ -13,8 +13,8 @@ import dlib
 import numpy as np
 import faiss
 
-
 # databaseの読み込み
+print("start indexing")
 datas = {}
 with open('mini_data.pickle', mode='rb') as f:
     datas = pickle.load(f)
@@ -25,17 +25,17 @@ for k in datas:
     face_image_names.append(k)
     face_vectors.append(datas[k])
 face_vectors = np.array(face_vectors).astype("float32")
+print("indexing is end")
 
 # faissを用いた
 nlist = 100
 m = 8
-k = 9 # 類似顔8こほしいので
-d = 128 # 顔特徴ベクトルの次元数
+k = 9  # 類似顔8こほしいので
+d = 128  # 顔特徴ベクトルの次元数
 quantizer = faiss.IndexFlatL2(d)  # this remains the same
 index = faiss.IndexIVFPQ(quantizer, d, nlist, m, 8)
 index.train(face_vectors)
 index.add(face_vectors)
-
 
 
 def get_distance(a, b):
@@ -74,7 +74,6 @@ def recommend_faces(similar_paths_manager, frame_manager):
             frame = frame_manager[0]
         except OSError:
             print("OSerror occured")
-            continue
         frame = np.array(frame)
 
         # 顔認識機のインスタンス
@@ -89,9 +88,22 @@ def recommend_faces(similar_paths_manager, frame_manager):
             continue
 
         dsts = []
-        for rect in rects:
-            dst = frame[rect.top():rect.bottom(), rect.left():rect.right()]
-            dsts.append(dst)
+        if face_rect_manager[:] == []:
+            for rect in rects:
+                dst = frame[rect.top():rect.bottom(), rect.left():rect.right()]
+                dsts.append(dst)
+                face_rect_manager.append(rect.top())
+                face_rect_manager.append(rect.bottom())
+                face_rect_manager.append(rect.left())
+                face_rect_manager.append(rect.right())
+        else:
+            for x, rect in enumerate(rects):
+                dst = frame[rect.top():rect.bottom(), rect.left():rect.right()]
+                dsts.append(dst)
+                face_rect_manager[4 * x] = rect.top()
+                face_rect_manager[4 * x + 1] = rect.bottom()
+                face_rect_manager[4 * x + 2] = rect.left()
+                face_rect_manager[4 * x + 3] = rect.right()
 
         # 距離測定（とりあえず一人だけ）
         # 顔情報のベクトル化　類似配列の生成
@@ -123,9 +135,11 @@ if __name__ == '__main__':
         # マネージャーの作成
         similar_paths_manager = manager.list()
         frame_manager = manager.list()
+        face_rect_manager = manager.list()
 
         # プロセスの生成
-        recommend_process = Process(target=recommend_faces, args=[similar_paths_manager, frame_manager], name="recommend")
+        recommend_process = Process(target=recommend_faces, args=[similar_paths_manager, frame_manager],
+                                    name="recommend")
 
         # プロセスの開始
         recommend_process.start()
@@ -158,12 +172,35 @@ if __name__ == '__main__':
             im5 = cv2.imread("./database/{}".format(similar_paths_manager[0][5]))
             im6 = cv2.imread("./database/{}".format(similar_paths_manager[0][6]))
             im7 = cv2.imread("./database/{}".format(similar_paths_manager[0][7]))
-            frame = cv2.resize(frame, (178, 218))
 
-            im_tile = concat_tile([[im0, im1, im2],
-                                   [im3, frame, im4],
-                                   [im5, im6, im7]])
-            cv2.imshow('tile camera', im_tile)
+            # 結果表示部分
+            # 顔認識部分の読み込み
+            rect_top = face_rect_manager[0]
+            rect_bottom = face_rect_manager[1]
+            rect_left = face_rect_manager[2]
+            rect_right = face_rect_manager[3]
+            print(rect_top, rect_bottom, rect_left, rect_right)
+            height = im0.shape[0]
+            width = im0.shape[1]
+
+            frame = cv2.rectangle(frame, (rect_left, rect_top), (rect_right, rect_bottom), (0, 255, 3), 3)
+            try:
+                part_frame = frame[rect_top + 45:rect_top + 218 + 45, rect_left - 178:rect_left]
+                blended_image = cv2.addWeighted(part_frame, 0.5, im0, 0.5, 0)
+                frame[rect_top + 45:rect_top + 218 + 45, rect_left - 178:rect_left] = blended_image
+            except ValueError:
+                pass
+            try:
+                frame[rect_top + 45:rect_top + 218 + 45, rect_right:rect_right + 178] = im1
+            except ValueError:
+                pass
+            try:
+                frame[rect_top - 218:rect_top, rect_left:rect_left + 178 + 30] = im2
+            except ValueError:
+                pass
+
+            frame = cv2.flip(frame, 1)
+            cv2.imshow('tile camera', frame)
             k = cv2.waitKey(1)
 
             if k == 27:
@@ -172,5 +209,3 @@ if __name__ == '__main__':
         cap.release()
         cv2.destroyAllWindows()
         print("release camera!!!")
-
-

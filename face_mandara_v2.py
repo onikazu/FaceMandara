@@ -1,3 +1,9 @@
+"""
+マルチスレッドを導入
+カメラのフレームレートを上昇させた
+"""
+
+
 from multiprocessing import Process, Manager, Value
 import pickle
 import math
@@ -114,8 +120,10 @@ def recommend_faces(similar_paths_manager, frame_manager):
             # print("number{} is end".format(i))
             i += 1
         print("finish about one face")
-        similar_paths_manager[:] = []
-        similar_paths_manager.append(similar_paths)
+        if similar_paths_manager[:] == []:
+            similar_paths_manager.append(similar_paths)
+        else:
+            similar_paths_manager[0] = similar_paths
 
 
 # カメラの撮影と結果表示
@@ -136,8 +144,10 @@ if __name__ == '__main__':
             ret, frame = cap.read()
 
             # 配列への変換/共有メモリへの代入
-            frame_manager[:] = []
-            frame_manager.append(list(frame))
+            if frame_manager[:] == []:
+                frame_manager.append(list(frame))
+            else:
+                frame_manager[0] = list(frame)
 
             # まだ結果が出ていないなら
             if not similar_paths_manager:
