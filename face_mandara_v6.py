@@ -1,5 +1,5 @@
 """
-結果表示方法の変更
+加算合成を取り入れた（ボツ）
 """
 
 from multiprocessing import Process, Manager, Value
@@ -95,49 +95,45 @@ def recommend_faces(similar_paths_manager, frame_manager):
             for rect in rects:
                 dst = frame[rect.top():rect.bottom(), rect.left():rect.right()]
                 dsts.append(dst)
-                face_rect_manager.append(rect.top())
-                face_rect_manager.append(rect.bottom())
-                face_rect_manager.append(rect.left())
-                face_rect_manager.append(rect.right())
+                rect_size = [rect.top(), rect.bottom(), rect.left(), rect.right()]
+                face_rect_manager.append(rect_size)
         else:
+            face_rect_manager[:] = []
             for x, rect in enumerate(rects):
                 dst = frame[rect.top():rect.bottom(), rect.left():rect.right()]
                 dsts.append(dst)
-                face_rect_manager[4 * x] = rect.top()
-                face_rect_manager[4 * x + 1] = rect.bottom()
-                face_rect_manager[4 * x + 2] = rect.left()
-                face_rect_manager[4 * x + 3] = rect.right()
+                rect_size = [rect.top(), rect.bottom(), rect.left(), rect.right()]
+                face_rect_manager.append(rect_size)
 
-        # 距離測定（とりあえず一人だけ）
+
+        # 距離測定(人数分)
         # 顔情報のベクトル化　類似配列の生成
+        similar_paths_manager[:] = []
+        for i in range(len(dsts)):
+            try:
+                target_image_encoded = face_recognition.face_encodings(dsts[i])[0]
+            except IndexError:
+                continue
 
-        try:
-            target_image_encoded = face_recognition.face_encodings(dsts[0])[0]
-        except IndexError:
-            continue
+            target_vector = np.array(list(target_image_encoded)).astype("float32")
+            target_vector.resize((1, 128))
 
-        target_vector = np.array(list(target_image_encoded)).astype("float32")
-        target_vector.resize((1, 128))
+            similar_paths = []
+            D, I = index.search(target_vector, k)
+            for i in range(1, len(I[0])):
+                similar_paths.append(face_image_names[I[0][i]])
+            print("I", I)
+            print(similar_paths)
 
-        similar_paths = []
-        D, I = index.search(target_vector, k)
-        for i in range(1, len(I[0])):
-            similar_paths.append(face_image_names[I[0][i]])
-        print("I", I)
-        print(similar_paths)
-
-        print("finish about one face")
-        # 画像パスの保存
-        if similar_paths_manager[:] == []:
+            print("finish about one face")
+            # 画像パスの保存
             similar_paths_manager.append(similar_paths)
-        else:
-            similar_paths_manager[0] = similar_paths
+
         # 距離の保存
         if similar_distance_manager[:] == []:
             similar_distance_manager.append(D)
         else:
             similar_distance_manager[0] = D
-
 
 
 # カメラの撮影と結果表示
@@ -159,7 +155,7 @@ if __name__ == '__main__':
             ret, frame = cap.read()
 
             # 配列への変換/共有メモリへの代入
-            print("frame_manager", frame_manager[:])
+            # print("frame_manager", frame_manager[:])
             if frame_manager[:] == []:
                 frame_manager.append(list(frame))
             else:
@@ -175,70 +171,82 @@ if __name__ == '__main__':
                     break
                 continue
 
-            im0 = cv2.imread("./big_database/{}".format(similar_paths_manager[0][0]))
-            im1 = cv2.imread("./big_database/{}".format(similar_paths_manager[0][1]))
-            im2 = cv2.imread("./big_database/{}".format(similar_paths_manager[0][2]))
-            im3 = cv2.imread("./big_database/{}".format(similar_paths_manager[0][3]))
-            im4 = cv2.imread("./big_database/{}".format(similar_paths_manager[0][4]))
-            im5 = cv2.imread("./big_database/{}".format(similar_paths_manager[0][5]))
-            im6 = cv2.imread("./big_database/{}".format(similar_paths_manager[0][6]))
-            im7 = cv2.imread("./big_database/{}".format(similar_paths_manager[0][7]))
+            # 類似顔を入れておく配列
+            all_images = []
+            try:
+                for i in range(len(similar_paths_manager)):
+                    images = []
+                    for j in range(len(similar_paths_manager[i])):
+                        images.append(cv2.imread("./big_database/{}".format(similar_paths_manager[i][j])))
+                    all_images.append(images)
+            except:
+                print("something occured")
 
             # 結果表示部分
             # 顔認識部分の読み込み
-            rect_top = face_rect_manager[0]
-            rect_bottom = face_rect_manager[1]
-            rect_left = face_rect_manager[2]
-            rect_right = face_rect_manager[3]
-            print(rect_top, rect_bottom, rect_left, rect_right)
-            height = im0.shape[0]
-            width = im0.shape[1]
+            rects = []
+            # print("typeaaaaaa", type(face_rect_manager[0]))
+            # print("face_rect_manager[i][0]", face_rect_manager[0][0])
+
+            for i in range(len(face_rect_manager)):
+                rect = []
+                # print("i", i)
+                rect.append(face_rect_manager[i][0])# top
+                rect.append(face_rect_manager[i][1]) # bottom
+                rect.append(face_rect_manager[i][2]) # left
+                rect.append(face_rect_manager[i][3]) # right
+                rects.append(rect)
+
             if similar_distance_manager:
                 distance = similar_distance_manager[0]
                 distance_no1 = distance[0][0]
                 distance_no2 = distance[0][1]
                 distance_no3 = distance[0][2]
 
-
-
             # 以下画像加工部分
             # オーバーレイの作成
             overlay = frame.copy()
 
-            # 距離データの挿入
+            # 距離データ枠の挿入
             if similar_distance_manager:
                 cv2.rectangle(overlay, (1000, 250), (1250, 50), (0, 0, 0), -1)
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 cv2.addWeighted(frame, 0.5, overlay, 0.5, 0, frame)
 
             # 顔認識のフレーム表示
-            frame = cv2.rectangle(frame, (rect_left, rect_top), (rect_right, rect_bottom), (0, 255, 3), 3)
+            for i in range(len(rects)):
+                frame = cv2.rectangle(frame, (rects[i][2], rects[i][0]), (rects[i][3], rects[i][1]), (0, 255, 3), 3)
 
             # 類似顔表示
-            # 左側に表示
-            try:
-                part_frame = frame[rect_top + 45:rect_top + 218 + 45, rect_left - 178:rect_left]
-                blended_image = cv2.addWeighted(part_frame, 0, im0, 1, 0)
-                frame[rect_top + 45:rect_top + 218 + 45, rect_left - 178:rect_left] = blended_image
-            except:
-                print(sys.exc_info())
-                pass
-            # 右側に表示
-            try:
-                part_frame = frame[rect_top + 45:rect_top + 218 + 45, rect_right:rect_right + 178]
-                blended_image = cv2.addWeighted(part_frame, 0.3, im1, 0.7, 0)
-                frame[rect_top + 45:rect_top + 218 + 45, rect_right:rect_right + 178] = blended_image
-            except:
-                print(sys.exc_info())
-                pass
-            # 上に表示
-            try:
-                part_frame = frame[rect_top - 218:rect_top, rect_left:rect_left + 178]
-                blended_image = cv2.addWeighted(part_frame, 0.7, im2, 0.3, 0)
-                frame[rect_top - 218:rect_top, rect_left:rect_left + 178] = blended_image
-            except:
-                print(sys.exc_info())
-                pass
+            print("len rects", len(rects))
+            print(rects)
+            # print("images", images)
+            for i in range(len(rects)):
+                # 左側に表示
+                try:
+                    part_frame = frame[rects[i][0] + 45:rects[i][0] + 218 + 45, rects[i][2] - 178:rects[i][2]]
+                    blended_image = cv2.add(part_frame, all_images[i][0])
+                    frame[rects[i][0] + 45:rects[i][0] + 218 + 45, rects[i][2] - 178:rects[i][2]] = blended_image
+                except:
+                    print("im im here")
+                    print(sys.exc_info())
+                    pass
+                # 右側に表示
+                try:
+                    part_frame = frame[rects[i][0] + 45:rects[i][0] + 218 + 45, rects[i][3]:rects[i][3] + 178]
+                    blended_image = cv2.add(part_frame, all_images[i][1])
+                    frame[rects[i][0] + 45:rects[i][0] + 218 + 45, rects[i][3]:rects[i][3] + 178] = blended_image
+                except:
+                    print(sys.exc_info())
+                    pass
+                # 上に表示
+                try:
+                    part_frame = frame[rects[i][0] - 218:rects[i][0], rects[i][2]:rects[i][2] + 178]
+                    blended_image = cv2.add(part_frame, all_images[i][2])
+                    frame[rects[i][0] - 218:rects[i][0], rects[i][2]:rects[i][2] + 178] = blended_image
+                except:
+                    print(sys.exc_info())
+                    pass
 
             # 鏡のように表示
             frame = cv2.flip(frame, 1)
