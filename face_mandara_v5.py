@@ -226,18 +226,18 @@ if __name__ == '__main__':
             for i in range(len(rects)):
                 # 左側に表示
                 try:
-                    part_frame = frame[rects[i][0] + 45:rects[i][0] + 218 + 45, rects[i][2] - 178:rects[i][2]]
+                    part_frame = frame[rects[i][0]:rects[i][0] + 218, rects[i][2] - 178:rects[i][2]]
                     blended_image = cv2.addWeighted(part_frame, 0, all_images[i][0], 1, 0)
-                    frame[rects[i][0] + 45:rects[i][0] + 218 + 45, rects[i][2] - 178:rects[i][2]] = blended_image
+                    frame[rects[i][0]:rects[i][0] + 218, rects[i][2] - 178:rects[i][2]] = blended_image
                 except:
                     print("im im here")
                     print(sys.exc_info())
                     pass
                 # 右側に表示
                 try:
-                    part_frame = frame[rects[i][0] + 45:rects[i][0] + 218 + 45, rects[i][3]:rects[i][3] + 178]
+                    part_frame = frame[rects[i][0]:rects[i][0] + 218, rects[i][3]:rects[i][3] + 178]
                     blended_image = cv2.addWeighted(part_frame, 0.5, all_images[i][1], 0.5, 0)
-                    frame[rects[i][0] + 45:rects[i][0] + 218 + 45, rects[i][3]:rects[i][3] + 178] = blended_image
+                    frame[rects[i][0]:rects[i][0] + 218, rects[i][3]:rects[i][3] + 178] = blended_image
                 except:
                     print(sys.exc_info())
                     pass
