@@ -259,17 +259,17 @@ if __name__ == '__main__':
                     pass
                 # 左下に
                 try:
-                    part_frame = frame[rects[i][1]:rects[i][1]+218, rects[i][3]-178:rects[i][3]]
+                    part_frame = frame[rects[i][1]:rects[i][1]+218, rects[i][2]-178:rects[i][2]]
                     blended_image = cv2.addWeighted(part_frame, 0.5, all_images[i][4], 0.5, 0)
-                    frame[rects[i][1]:rects[i][1]+218, rects[i][3]-178:rects[i][3]] = blended_image
+                    frame[rects[i][1]:rects[i][1]+218, rects[i][2]-178:rects[i][2]] = blended_image
                 except:
                     print(sys.exc_info())
                     pass
                 # 右下に表示
                 try:
-                    part_frame = frame[rects[i][1]:rects[i][1]+218, rects[i][2]:rects[i][2] + 178]
+                    part_frame = frame[rects[i][1]:rects[i][1]+218, rects[i][3]:rects[i][3] + 178]
                     blended_image = cv2.addWeighted(part_frame, 0.5, all_images[i][5], 0.5, 0)
-                    frame[rects[i][1]:rects[i][1]+218, rects[i][2]:rects[i][2] + 178] = blended_image
+                    frame[rects[i][1]:rects[i][1]+218, rects[i][3]:rects[i][3] + 178] = blended_image
                 except:
                     print(sys.exc_info())
                     pass
