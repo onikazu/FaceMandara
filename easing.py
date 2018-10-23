@@ -1,3 +1,13 @@
+"""
+t: 現在の時刻
+b: 開始位置
+c: 移動距離（終了位置では無いので注意）
+d: 総移動時間
+
+d<tになってしまうと挙動がおかしくなることがあるので注意
+"""
+
+
 def ease_in_out_circular(t, b, c, d):
 	t /= d/2.0
 	if t < 1:
@@ -28,9 +38,22 @@ def easing(t, b, c, d, type):
 		else:
 			t -= 2.625/2.75
 			return c*(7.5625*t*t + 0.984375) + b
+	if type == "ease_in_expo":
+		if t == 0:
+			# return b
+			# for avoiding ValueError: height and width must be > 0
+			return b + 0.0000001
+		else:
+			return c*2**(10*(t/d-1)+b)
 
 
 """
+easeInExpo:function(e,a,c,b,d){return a==0?c:b*Math.pow(2,10*(a/d-1))+c}
+
+easeOutBounce:function(e,a,c,b,d){return(a/=
+d)<1/2.75?b*7.5625*a*a+c:a<2/2.75?b*(7.5625*(a-=1.5/2.75)*a+0.75)+c:a<2.5/2.75?b*(7.5625*(a-=2.25/2.75)*a+0.9375)+c:b*(7.5625*(a-=2.625/2.75)*a+0.984375)+c},
+
+
 jQuery.easing.jswing=jQuery.easing.swing;
 jQuery.extend(jQuery.easing,{def:"easeOutQuad",swing:function(e,a,c,b,d){return jQuery.easing[jQuery.easing.def](e,a,c,b,d)},easeInQuad:function(e,a,c,b,d){return b*(a/=d)*a+c},easeOutQuad:function(e,a,c,b,d){return-b*(a/=d)*(a-2)+c},easeInOutQuad:function(e,a,c,b,d){if((a/=d/2)<1)return b/2*a*a+c;return-b/2*(--a*(a-2)-1)+c},easeInCubic:function(e,a,c,b,d){return b*(a/=d)*a*a+c},easeOutCubic:function(e,a,c,b,d){return b*((a=a/d-1)*a*a+1)+c},easeInOutCubic:function(e,a,c,b,d){if((a/=d/2)<1)return b/
 2*a*a*a+c;return b/2*((a-=2)*a*a+2)+c},easeInQuart:function(e,a,c,b,d){return b*(a/=d)*a*a*a+c},easeOutQuart:function(e,a,c,b,d){return-b*((a=a/d-1)*a*a*a-1)+c},easeInOutQuart:function(e,a,c,b,d){if((a/=d/2)<1)return b/2*a*a*a*a+c;return-b/2*((a-=2)*a*a*a-2)+c},easeInQuint:function(e,a,c,b,d){return b*(a/=d)*a*a*a*a+c},easeOutQuint:function(e,a,c,b,d){return b*((a=a/d-1)*a*a*a*a+1)+c},easeInOutQuint:function(e,a,c,b,d){if((a/=d/2)<1)return b/2*a*a*a*a*a+c;return b/2*((a-=2)*a*a*a*a+2)+c},easeInSine:function(e,
