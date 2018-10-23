@@ -7,25 +7,27 @@ def ease_in_out_circular(t, b, c, d):
 
 
 def easing(t, b, c, d, type):
-    if type == "ease_in_out_circular":
-        t /= d/2.0
-        if t < 1:
-            return c/2.0 * 2.0**(10.0 * (t-1)) + b
-        t = t - 1
-        return c/2.0 * (-(2**(-10*t)) + 2 ) + b
-    if type == "ease_out_bounce":
-        t /= d
-        if t < 1/2.75:
-            return c * (7.5625 * t * t) + b
-        elif t < 2/2.75:
-            t -= 1.5/2.75
-            return c*(7.5625*t*t + 0.75) + b
-        elif t < 2.5/2.75:
-            t -= 2.25/2.75
-            return c*(7.5625*t*t + 0.9375) + b
-        else:
-            t -= 2.625/2.75
-            return c*(7.5625*t*t + 0.984375) + b
+	if t > d:
+		t = d
+	if type == "ease_in_out_circular":
+		t /= d/2.0
+		if t < 1:
+			return c/2.0 * 2.0**(10.0 * (t-1)) + b
+		t = t - 1
+		return c/2.0 * (-(2**(-10*t)) + 2 ) + b
+	if type == "ease_out_bounce":
+		t /= d
+		if t < 1/2.75:
+			return c * (7.5625 * t * t) + b
+		elif t < 2/2.75:
+			t -= 1.5/2.75
+			return c*(7.5625*t*t + 0.75) + b
+		elif t < 2.5/2.75:
+			t -= 2.25/2.75
+			return c*(7.5625*t*t + 0.9375) + b
+		else:
+			t -= 2.625/2.75
+			return c*(7.5625*t*t + 0.984375) + b
 
 
 """

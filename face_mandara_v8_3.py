@@ -1,8 +1,8 @@
 """
-複数人の同時認識に対応(完全では無い。カクつきあり)
-コードの可読性の向上(ファイルを分けるなど)
-画像が徐々に大きくなる演出
+PILの導入
+角を丸くした画像を合成する
 """
+
 # ライブラリインポート
 from multiprocessing import Process, Manager, Value
 import pickle
@@ -12,6 +12,7 @@ import sys
 import traceback
 import random
 
+from PIL import Image, ImageDraw
 import cv2
 import face_recognition
 import dlib
@@ -93,10 +94,7 @@ def recommend_faces(similar_paths_manager, frame_manager):
 
         # 距離の保存
         similar_distance_manager[:] = []
-        if similar_distance_manager[:] == []:
-            similar_distance_manager.append(D)
-        else:
-            similar_distance_manager[0] = D
+        similar_distance_manager.append(D)
 
 
 if __name__ == '__main__':
@@ -145,36 +143,25 @@ if __name__ == '__main__':
             ret, frame = cap.read()
 
             # 配列への変換/共有メモリへの代入
-            # print("frame_manager", frame_manager[:])
             if frame_manager[:] == []:
                 frame_manager.append(list(frame))
             else:
                 frame_manager[0] = list(frame)
-
-            # 二重配列で画像名が入る
-            # [['131584.jpg', '149040.jpg', '117026.jpg', '139135.jpg', '126043.jpg', '076051.jpg', '142724.jpg', '079790.jpg']]
-            #print("spm", similar_paths_manager)
-
-            # numpy の２次元配列が、リストの中に入っている
-            # [array([[0.20946765, 0.21655259, 0.22225028, 0.22980395, 0.23395269, 0.23477799, 0.23554592, 0.2387094 , 0.24041814]], dtype=float32)]
-            # print("sdm", similar_distance_manager)
-
-
-            # [[241, 562, 491, 812]]
-            #print("frm", face_rect_manager)
 
             # まだ結果が出ていないなら
             if not similar_paths_manager:
                 continue
 
             # 類似顔を入れておく配列
-            # similar_paths_managerをcv2オブジェクトにした
+            # similar_paths_managerをPILオブジェクトにした（v8_2との相違点）
+            # imagesは一つのターゲットについての検索結果が入る変数。
+            # all_imagesは動画内のターゲットすべてについての検索結果
             all_images = []
             try:
                 for i in range(len(similar_paths_manager)):
                     images = []
                     for j in range(len(similar_paths_manager[i])):
-                        images.append(cv2.imread("./big_database/{}".format(similar_paths_manager[i][j])))
+                        images.append(Image.open("./big_database/{}".format(similar_paths_manager[i][j])))
                     all_images.append(images)
             except:
                 print("something occured")
@@ -211,7 +198,7 @@ if __name__ == '__main__':
                 similar_windows_one_rect = []
                 print("i", i)
                 for j in range(len(all_images[i])):
-                    sw = similar_window_2.SimilarWindow(distance=distance_no1, place=[0, 0], image=all_images[i][j])
+                    sw = similar_window_v2.SimilarWindow(distance=distance_no1, place=[0, 0], image=all_images[i][j], similar_num=len(all_images[i])-j)
                     similar_windows_one_rect.append(sw)
                 similar_windows.append(similar_windows_one_rect)
 
@@ -225,12 +212,10 @@ if __name__ == '__main__':
             while True:
                 print("animation start")
                 ret, frame = cap.read()
-                # 鏡のように表示
-                frame = cv2.flip(frame, 1)
+
 
                 # 人数が変更したらまた位置から認識する
                 x = len(rects)
-                print("x", x)
                 rects = []
                 try:
                     for i in range(len(face_rect_manager)):
@@ -248,21 +233,36 @@ if __name__ == '__main__':
                     print("broke")
                     break
 
+                # 鏡のように表示
+                frame = cv2.flip(frame, 1)
 
-                if frame_manager[:] == []:
-                    frame_manager.append(list(frame))
-                else:
-                    frame_manager[0] = list(frame)
+                frame_manager[:] = []
+                frame_manager.append(list(frame))
 
-                # 以下画像加工部分
+                # 以下画像加工部分(前半部分はCV２を用いている)
                 # オーバーレイの作成
                 overlay = frame.copy()
-
                 # 距離データ枠の挿入
                 if similar_distance_manager:
                     cv2.rectangle(overlay, (0, 320), (185, 40), (0, 0, 0), -1)
                     font = cv2.FONT_HERSHEY_SIMPLEX
                     cv2.addWeighted(frame, 0.5, overlay, 0.5, 0, frame)
+
+                # 距離データの挿入
+                for i in range(len(distance[0])):
+                    distance[0][i] = distance[0][i] + random.uniform(0, 0.00000001)
+                cv2.putText(frame, "distances",(30, 75), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
+                for i in range(len(distance[0])):
+                    print("distance", distance[0][i])
+                    d = round(distance[0][i], similar_windows[0][0].time%20)
+                    cv2.putText(frame, str(d),(30, 100+25*i), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
+
+                # 顔認識フレーム情報の更新
+                for i in range(len(face_frames)):
+                    face_frames[i].top = face_rect_manager[i][0]
+                    face_frames[i].bottom = face_rect_manager[i][1]
+                    face_frames[i].left = face_rect_manager[i][2]
+                    face_frames[i].right = face_rect_manager[i][3]
 
                 # 顔認識のフレーム表示
                 for i in range(len(face_frames)):
@@ -272,9 +272,11 @@ if __name__ == '__main__':
                 for i in range(len(face_frames)):
                     face_frame_centers.append(face_frames[i].cal_center())
 
+                # フレームデータのPIL変換
+                frame = frame[:, :, ::-1].copy()
+                frame = Image.fromarray(frame)
+
                 # 類似顔表示
-                speed = 5
-                print("len similar_windows", len(similar_windows))
                 end_frame_num = 15
                 easing_type = "ease_out_bounce"
                 for i in range(len(similar_windows)):
@@ -282,8 +284,6 @@ if __name__ == '__main__':
                         t = similar_windows[i][j].time
                         if t > end_frame_num:
                             t = end_frame_num
-                        print("time",similar_windows[i][j].time)
-                        print(face_frame_centers[i])
                         if  j == 0:
                             x = easing.easing(t, face_frame_centers[i][1]-80, 0, end_frame_num, easing_type)
                             y = easing.easing(t, face_frame_centers[i][0]-80, 250, end_frame_num, easing_type)
@@ -315,23 +315,15 @@ if __name__ == '__main__':
                         similar_windows[i][j].put_on_frame(frame=frame, place=[y, x])
                         print("put", i)
 
-                for i in range(len(distance[0])):
-                    distance[0][i] = distance[0][i] + random.uniform(0, 0.00000001)
-                    print(distance[0][i])
-
-                cv2.putText(frame, "distances",(30, 75), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
-                for i in range(len(distance[0])):
-                    print("distance", distance[0][i])
-                    d = round(distance[0][i], similar_windows[0][0].time%20)
-                    cv2.putText(frame, str(d),(30, 100+25*i), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
-
-
-                cv2.imshow('tile camera', frame)
-                k = cv2.waitKey(1)
-
                 if similar_windows[0][0].time >= end_frame_num+15:
                     break
 
+                # cv2への変換
+                frame=np.asarray(frame)
+                frame = frame[:, :, ::-1]
+
+                cv2.imshow('FaceMandara', frame)
+                k = cv2.waitKey(1)
             if k == 27:
                 print("released!")
                 break
