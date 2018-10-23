@@ -70,6 +70,7 @@ def recommend_faces(similar_paths_manager, frame_manager):
         # 距離測定(人数分)
         # 顔情報のベクトル化　類似配列の生成
         similar_paths_manager[:] = []
+        D = []
         for i in range(len(dsts)):
             try:
                 target_image_encoded = face_recognition.face_encodings(dsts[i])[0]

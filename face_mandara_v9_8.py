@@ -1,5 +1,5 @@
 """
-枠をつけた
+% 表示にする
 """
 
 # ライブラリインポート
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     # faissを用いたPQの準備
     nlist = 100
     m = 8
-    k = 100000  # 類似顔7こほしいのでk=8
+    k = 8  # 類似顔7こほしいのでk=8
     d = 128  # 顔特徴ベクトルの次元数
     quantizer = faiss.IndexFlatL2(d)  # this remains the same
     index = faiss.IndexIVFPQ(quantizer, d, nlist, m, 8)
@@ -182,6 +182,7 @@ if __name__ == '__main__':
 
             if similar_distance_manager:
                 distance = similar_distance_manager[0]
+                print("len distances", len(distance))
                 distance_no1 = distance[0][0]
                 distance_no2 = distance[0][1]
                 distance_no3 = distance[0][2]
@@ -289,8 +290,9 @@ if __name__ == '__main__':
                     cv2.putText(frame, "distances",(30, 75), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
                     for i in range(len(distance[0])):
                         print("distance", distance[0][i])
-                        d = round(distance[0][i], similar_windows[0][0].time%20)
-                        cv2.putText(frame, str(d),(30, 100+25*i), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
+                        # d = round(distance[0][i], similar_windows[0][0].time%20)
+                        d = distance[0][i]/distance_worst
+                        cv2.putText(frame, str(d)+"%",(30, 100+25*i), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
                 except:
                     pass
 
