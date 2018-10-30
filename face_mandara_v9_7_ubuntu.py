@@ -163,7 +163,7 @@ if __name__ == '__main__':
             if not similar_paths_manager:
                 frame = frame[:, :, ::-1].copy()
                 frame = Image.fromarray(frame)
-                frame = frame.resize((frame.width*2, frame.height*2))
+                # frame = frame.resize((frame.width*2, frame.height*2))
                 # cv2への変換
                 frame=np.asarray(frame)
                 frame = frame[:, :, ::-1]
@@ -384,7 +384,7 @@ if __name__ == '__main__':
                     break
 
 
-                frame = frame.resize((frame.width*2, frame.height*2))
+                # frame = frame.resize((frame.width*2, frame.height*2))
                 # cv2への変換
                 frame=np.asarray(frame)
                 frame = frame[:, :, ::-1]
