@@ -160,6 +160,9 @@ if __name__ == '__main__':
                 frame = frame[:, :, ::-1].copy()
                 frame = Image.fromarray(frame)
                 frame = frame.resize((frame.width*2, frame.height*2))
+                # cv2への変換
+                frame=np.asarray(frame)
+                frame = frame[:, :, ::-1]
                 cv2.imshow('FaceMandara', frame)
                 k = cv2.waitKey(1)
                 continue
