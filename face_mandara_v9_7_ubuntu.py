@@ -336,7 +336,9 @@ if __name__ == '__main__':
 
 
                 # 類似顔表示
+                # 最初の20で出現、30待機、最後の20で消滅
                 end_frame_num = 20
+                wait_frame_num = 50
                 easing_type = "ease_in_out_circular"
                 for i in range(len(similar_windows)):
                     rect_top = rects[i][0]
@@ -348,11 +350,17 @@ if __name__ == '__main__':
                     face_frame_center_y = face_frame_centers[i][0]
                     for j in reversed(range(len(similar_windows[i]))):
                         t = similar_windows[i][j].time
-                        if t > end_frame_num:
+                        if t < end_frame_num:
+                            x = easing.easing(t, face_frame_center_x, similar_windows[i][j].movement_amount_x, end_frame_num, easing_type)
+                            y = easing.easing(t, face_frame_center_y, similar_windows[i][j].movement_amount_y, end_frame_num, easing_type)
+                        elif t < wait_frame_num:
                             t = end_frame_num
+                            x = easing.easing(t, face_frame_center_x, similar_windows[i][j].movement_amount_x, end_frame_num, easing_type)
+                            y = easing.easing(t, face_frame_center_y, similar_windows[i][j].movement_amount_y, end_frame_num, easing_type)
+                        else:
+                            x = easing.easing(t%wait_frame_num, similar_windows[i][j].movement_amount_x, face_frame_center_x, end_frame_num, easing_type)
+                            y = easing.easing(t%wait_frame_num, similar_windows[i][j].movement_amount_y, face_frame_center_y, end_frame_num, easing_type)
 
-                        x = easing.easing(t, face_frame_center_x, similar_windows[i][j].movement_amount_x, end_frame_num, easing_type)
-                        y = easing.easing(t, face_frame_center_y, similar_windows[i][j].movement_amount_y, end_frame_num, easing_type)
 
                         # 情報更新・直線描画
                         lines[i][j].setter(face_frame_center_x, face_frame_center_y, x, y)

@@ -75,14 +75,22 @@ class SimilarWindow:
     def _exe_image_put(self, x, y, image, frame):
         window_height = 218
         window_width = 178
+        end_frame_num = 20
+        wait_frame_num = 50
+
         # 画像の加工
         print("frame", type(frame))
         print("image", type(image))
         try:
             t = self.time
-            if t > 15:
-                t = 15
-            easing_num = easing.easing(t, 0, 1, 15, "ease_in_expo")
+            if t < end_frame_num:
+                easing_num = easing.easing(t, 0, 1, end_frame_num, "ease_in_expo")
+            elif t < wait_frame_num:
+                t = end_frame_num
+                easing_num = easing.easing(t, 0, 1, end_frame_num, "ease_in_expo")
+            else:
+                easing_num = easing.easing(t%wait_frame_num, 0, 1, end_frame_num, "ease_in_expo")
+
             window_width = int(window_width * (self.similar_num/10)*easing_num)
             window_height = int(window_height * (self.similar_num/10)*easing_num)
 
