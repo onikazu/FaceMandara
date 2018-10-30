@@ -166,6 +166,9 @@ if __name__ == '__main__':
                     all_images.append(images)
             except:
                 print("something occured1")
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                traceback.print_exception(exc_type, exc_value, exc_traceback,
+                                  limit=2, file=sys.stdout)
 
             # 顔認識部分の読み込み
             # face_rect_managerを名前付けしてやっただけ
