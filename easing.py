@@ -46,6 +46,14 @@ def easing(t, b, c, d, type):
 		else:
 			return c * 2**(10*(t/d - 1)) + b
 
+	if type == "ease_out_expo":
+		if t == 0:
+			# return b
+			# for avoiding ValueError: height and width must be > 0
+			return b + 0.0000001
+		else:
+			return c * (-(2.0**(-10.0 * t/d)) + 1) + b
+
 
 """
 easeInExpo:function(e,a,c,b,d){return a==0?c:b*Math.pow(2,10*(a/d-1))+c}
