@@ -151,7 +151,7 @@ class SimilarWindow:
         font = ImageFont.truetype("arial.ttf", 17)
         print("in _num_ride")
         try:
-            draw.text((w/2, h*(2/3)), str(text), font=font, fill=(255,255,255,128))
+            draw.text((w/2-20, h*(2/3)-10), "No. "+str(text), font=font, fill=(255,255,255,128))
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback,
