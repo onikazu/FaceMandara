@@ -143,7 +143,7 @@ class SimilarWindow:
             image_num = image
         # ドロワー
         draw = ImageDraw.Draw(image_num)
-        distance_text = round(num, self.time%25)
+        text = round(num, self.time%25)
         w = image.width
         h = image.height
         padding = 10
@@ -151,7 +151,7 @@ class SimilarWindow:
         font = ImageFont.truetype("arial.ttf", 17)
         print("in _num_ride")
         try:
-            draw.text((w/2, h*(2/3)), str(distance_text), font=font, fill=(255,0,0,128))
+            draw.text((w/2, h*(2/3)), str(text), font=font, fill=(255,0,0,128))
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback,
