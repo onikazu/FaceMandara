@@ -21,7 +21,7 @@ import faiss
 
 import easing
 from objects import face_frame_v2
-from objects import similar_window_v9_7, line_v3
+from objects import similar_window_v9_7_ubuntu, line_v3
 
 
 # databaseの読み込み
@@ -218,29 +218,29 @@ if __name__ == '__main__':
                     # 真下
                     if  j == 0:
                         amount_movement_x = 0
-                        amount_movement_y = 270
+                        amount_movement_y = 180
                     # 真左
                     elif j == 1:
-                        amount_movement_x = -320
+                        amount_movement_x = -210
                         amount_movement_y = 0
                     # 真右
                     elif j == 2:
-                        amount_movement_x = 320
+                        amount_movement_x = 210
                         amount_movement_y = 0
                     elif j== 3:
-                        amount_movement_x = 200
-                        amount_movement_y = 185
+                        amount_movement_x = 150
+                        amount_movement_y = 140
                     elif j == 4:
-                        amount_movement_x = -200
-                        amount_movement_y = 185
+                        amount_movement_x = -150
+                        amount_movement_y = 140
                     elif j == 5:
-                        amount_movement_x = 160
-                        amount_movement_y = 40
+                        amount_movement_x = 120
+                        amount_movement_y = 20
                     else:
-                        amount_movement_x = -160
-                        amount_movement_y = 40
+                        amount_movement_x = -120
+                        amount_movement_y = 20
 
-                    sw = similar_window_v9_7.SimilarWindow(distance=distance_no1, \
+                    sw = similar_window_v9_7_ubuntu.SimilarWindow(distance=distance_no1, \
                     place=[0, 0], image=all_images[i][j], \
                     similar_num=len(all_images[i])-j, \
                     movement_amount=(amount_movement_x, amount_movement_y))
