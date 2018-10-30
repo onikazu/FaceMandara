@@ -165,7 +165,7 @@ if __name__ == '__main__':
                         images.append(Image.open("./big_database/{}".format(similar_paths_manager[i][j])))
                     all_images.append(images)
             except:
-                print("something occured")
+                print("something occured1")
 
             # 顔認識部分の読み込み
             # face_rect_managerを名前付けしてやっただけ
@@ -180,7 +180,7 @@ if __name__ == '__main__':
                     rect.append(face_rect_manager[i][3]) # right
                     rects.append(rect)
             except:
-                print("something occured")
+                print("something occured2")
 
             if similar_distance_manager:
                 distance = similar_distance_manager[0]
@@ -263,7 +263,7 @@ if __name__ == '__main__':
                         rect.append(face_rect_manager[i][3]) # right
                         rects.append(rect)
                 except:
-                    print("something occured")
+                    print("something occured3")
                 if x != len(rects):
                     print("len rects")
                     print("broke")
