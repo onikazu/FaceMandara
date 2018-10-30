@@ -143,10 +143,11 @@ if __name__ == '__main__':
         recommend_process.start()
         start_time = time.time()
         cap = cv2.VideoCapture(0)  # 引数はカメラのデバイス番号
-        cap.set(6,cv2.VideoWriter_fourcc(*'MJPG'))
-        cap.set(5,10)
-        cap.set(4,1944)
-        cap.set(3,2592)
+        # 解像度高まるがfpsが低くなってしまう
+        # cap.set(6,cv2.VideoWriter_fourcc(*'MJPG'))
+        # cap.set(5,10)
+        # cap.set(4,1944)
+        # cap.set(3,2592)
 
         # 撮影の開始
         while True:
@@ -163,7 +164,7 @@ if __name__ == '__main__':
             if not similar_paths_manager:
                 frame = frame[:, :, ::-1].copy()
                 frame = Image.fromarray(frame)
-                # frame = frame.resize((frame.width*2, frame.height*2))
+                frame = frame.resize((frame.width*2, frame.height*2))
                 # cv2への変換
                 frame=np.asarray(frame)
                 frame = frame[:, :, ::-1]
@@ -384,7 +385,7 @@ if __name__ == '__main__':
                     break
 
 
-                # frame = frame.resize((frame.width*2, frame.height*2))
+                frame = frame.resize((frame.width*2, frame.height*2))
                 # cv2への変換
                 frame=np.asarray(frame)
                 frame = frame[:, :, ::-1]
