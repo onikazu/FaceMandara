@@ -164,7 +164,7 @@ if __name__ == '__main__':
             if not similar_paths_manager:
                 frame = frame[:, :, ::-1].copy()
                 frame = Image.fromarray(frame)
-                frame = frame.resize((frame.width*2, frame.height*2))
+                # frame = frame.resize((frame.width*2, frame.height*2))
                 # cv2への変換
                 frame=np.asarray(frame)
                 frame = frame[:, :, ::-1]
@@ -345,9 +345,9 @@ if __name__ == '__main__':
 
 
                 # 類似顔表示
-                # 最初の20で出現、30待機、最後の20で消滅
-                end_frame_num = 20
-                wait_frame_num = 50
+                # 最初の10で出現、30待機、最後の20で消滅
+                end_frame_num = 10
+                wait_frame_num = 40
                 easing_type = "ease_in_out_circular"
                 for i in range(len(similar_windows)):
                     rect_top = rects[i][0]
@@ -385,7 +385,7 @@ if __name__ == '__main__':
                     break
 
 
-                frame = frame.resize((frame.width*2, frame.height*2))
+                # frame = frame.resize((frame.width*2, frame.height*2))
                 # cv2への変換
                 frame=np.asarray(frame)
                 frame = frame[:, :, ::-1]

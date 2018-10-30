@@ -75,8 +75,8 @@ class SimilarWindow:
     def _exe_image_put(self, x, y, image, frame):
         window_height = 218
         window_width = 178
-        end_frame_num = 20
-        wait_frame_num = 50
+        end_frame_num = 10
+        wait_frame_num = 40
 
         # 画像の加工
         print("frame", type(frame))
