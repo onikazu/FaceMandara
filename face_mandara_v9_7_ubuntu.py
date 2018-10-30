@@ -144,10 +144,10 @@ if __name__ == '__main__':
         start_time = time.time()
         cap = cv2.VideoCapture(0)  # 引数はカメラのデバイス番号
         # 解像度高まるがfpsが低くなってしまう
-        # cap.set(6,cv2.VideoWriter_fourcc(*'MJPG'))
-        # cap.set(5,10)
-        # cap.set(4,1944)
-        # cap.set(3,2592)
+        cap.set(6,cv2.VideoWriter_fourcc(*'MJPG'))
+        cap.set(5,10)
+        cap.set(4,1944)
+        cap.set(3,2592)
 
         # 撮影の開始
         while True:
