@@ -98,7 +98,7 @@ class SimilarWindow:
             # 類似顔の大きさ変更（縮尺変更）
             image_resized = image.resize((window_width, window_height))
             # 順位挿入
-            image_resized = self._num_ride(image_resized, self.similar_num)
+            image_resized = self._num_ride(image_resized, 8-self.similar_num)
             # 正方形にトリミング
             image_trimmed = image_resized.crop((0, (window_height-window_width)/2, window_width, (window_height-window_width)/2+window_width))
             # 枠は5pixの太さにする
