@@ -37,9 +37,6 @@ class Line:
         if ((self.x1-circle_center_x)**2+(self.y1-circle_center_y))<radius**2:
             return
 
-
-
-
         # # 枠内では線を表示しないようにしてやる
         # if ((self.x1-circle_center_x)**2+(self.y1-circle_center_y))<radius**2:
         #     self.cross_x = self.x1
@@ -53,6 +50,7 @@ class Line:
 
         draw = ImageDraw.Draw(frame)
         draw.line((self.cross_x, self.cross_y, self.x1, self.y1), fill=(255, 255, 255), width=1)
+        print("line drew:{},{},{},{}".format(self.x0, self.y0, self.x1, self.y1))
 
     def setter(self, x0, y0, x1, y1):
         self.x0 = int(x0)
