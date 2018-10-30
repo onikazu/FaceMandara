@@ -366,9 +366,15 @@ if __name__ == '__main__':
                             y = easing.easing(t%wait_frame_num, face_frame_center_y+similar_windows[i][j].movement_amount_y, -similar_windows[i][j].movement_amount_y,end_frame_num, easing_type)
 
 
+                        # cv2への変換
+                        frame=np.asarray(frame)
+                        frame = frame[:, :, ::-1]
                         distance[i][j] = distance[i][j] + random.uniform(0, 0.00000001)
                         d = round(distance[0][i], similar_windows[0][0].time%20)
                         cv2.putText(frame, str(d),(x, y), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
+                        frame = frame[:, :, ::-1].copy()
+                        frame = Image.fromarray(frame)
+
                         # 情報更新・直線描画
                         lines[i][j].setter(face_frame_center_x, face_frame_center_y, x, y)
                         lines[i][j].draw_line(frame, rect)
