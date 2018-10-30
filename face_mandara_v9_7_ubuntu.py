@@ -147,6 +147,7 @@ if __name__ == '__main__':
         # 撮影の開始
         while True:
             ret, frame = cap.read()
+            frame = cv2.flip(frame, 1)
 
             # 配列への変換/共有メモリへの代入
             if frame_manager[:] == []:
@@ -156,7 +157,6 @@ if __name__ == '__main__':
 
             # まだ結果が出ていないなら
             if not similar_paths_manager:
-                frame = cv2.flip(frame, 1)
                 frame = frame[:, :, ::-1].copy()
                 frame = Image.fromarray(frame)
                 frame = frame.resize((frame.width*2, frame.height*2))
