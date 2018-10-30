@@ -149,10 +149,8 @@ class SimilarWindow:
         font = ImageFont.truetype("arial.ttf", 17)
         print("in _num_ride")
         try:
-            print("im in try!")
-            print("h:", type(h), h)
-            print("distance_text: ", type(distance_text), distance_text)
-            draw.text((0, h-17), str(distance_text), font=font, fill=(255,0,0,128))
+
+            draw.text((0, h/2), str(distance_text), font=font, fill=(255,0,0,128))
         except:
             print("im in except")
             print("h:", type(h), h)
