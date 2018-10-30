@@ -259,8 +259,6 @@ if __name__ == '__main__':
             while True:
                 print("animation start")
                 ret, frame = cap.read()
-                frame = cv2.resize(frame, 2, 2)
-
 
                 # 人数が変更したらまた位置から認識する
                 x = len(rects)
@@ -364,6 +362,8 @@ if __name__ == '__main__':
                 if similar_windows[0][0].time >= end_frame_num+15:
                     break
 
+
+                frame = frame.resize((frame.width*2, frame.height*2))
                 # cv2への変換
                 frame=np.asarray(frame)
                 frame = frame[:, :, ::-1]
