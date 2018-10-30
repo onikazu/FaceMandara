@@ -336,7 +336,7 @@ if __name__ == '__main__':
 
 
                 # 類似顔表示
-                end_frame_num = 15
+                end_frame_num = 20
                 easing_type = "ease_in_out_circular"
                 for i in range(len(similar_windows)):
                     rect_top = rects[i][0]
@@ -364,8 +364,8 @@ if __name__ == '__main__':
                         similar_windows[i][j].put_on_frame(frame=frame, place=[y, x])
                         print("put", i)
 
-                # アニメーション終了から15秒後に次の検索に入る
-                if similar_windows[0][0].time >= end_frame_num+15:
+                # アニメーション終了から15フレーム後に次の検索に入る
+                if similar_windows[0][0].time >= end_frame_num+40:
                     break
 
 
