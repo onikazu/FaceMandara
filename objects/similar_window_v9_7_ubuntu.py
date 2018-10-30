@@ -90,6 +90,7 @@ class SimilarWindow:
                 easing_num = easing.easing(t, 0, 1, end_frame_num, "ease_in_expo")
             else:
                 easing_num = easing.easing(t%wait_frame_num, 1, -1, end_frame_num, "ease_in_expo")
+                print("easing_num", easing_num)
 
             window_width = int(window_width * (self.similar_num/10)*easing_num)
             window_height = int(window_height * (self.similar_num/10)*easing_num)
