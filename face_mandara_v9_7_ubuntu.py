@@ -71,6 +71,7 @@ def recommend_faces(similar_paths_manager, frame_manager, face_rect_manager, sim
         rects = detector(frame, 1)
 
         # 顔認識できなかったときcontinue
+        # 共有メモリ内のデータも消す
         if not rects:
             face_rect_manager[:] = []
             similar_paths_manager[:] = []
@@ -258,6 +259,7 @@ if __name__ == '__main__':
             while True:
                 print("animation start")
                 ret, frame = cap.read()
+                frame = cv2.resize(frame, 2, 2)
 
 
                 # 人数が変更したらまた位置から認識する
