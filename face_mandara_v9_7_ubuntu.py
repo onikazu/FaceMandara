@@ -358,8 +358,8 @@ if __name__ == '__main__':
                             x = easing.easing(t, face_frame_center_x, similar_windows[i][j].movement_amount_x, end_frame_num, easing_type)
                             y = easing.easing(t, face_frame_center_y, similar_windows[i][j].movement_amount_y, end_frame_num, easing_type)
                         else:
-                            x = easing.easing(t, face_frame_center_x+similar_windows[i][j].movement_amount_x, -similar_windows[i][j].movement_amount_x, end_frame_num, easing_type)
-                            y = easing.easing(t, face_frame_center_y+similar_windows[i][j].movement_amount_y, -similar_windows[i][j].movement_amount_y,end_frame_num, easing_type)
+                            x = easing.easing(t%wait_frame_num, face_frame_center_x+similar_windows[i][j].movement_amount_x, -similar_windows[i][j].movement_amount_x, end_frame_num, easing_type)
+                            y = easing.easing(t%wait_frame_num, face_frame_center_y+similar_windows[i][j].movement_amount_y, -similar_windows[i][j].movement_amount_y,end_frame_num, easing_type)
 
 
                         # 情報更新・直線描画
@@ -373,7 +373,7 @@ if __name__ == '__main__':
                         print("put", i)
 
                 # アニメーション終了から15フレーム後に次の検索に入る
-                if similar_windows[0][0].time >= end_frame_num+40:
+                if similar_windows[0][0].time >= end_frame_num*2+wait_frame_num:
                     break
 
 
