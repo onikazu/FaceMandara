@@ -44,7 +44,7 @@ def easing(t, b, c, d, type):
 			# for avoiding ValueError: height and width must be > 0
 			return b + 0.0000001
 		else:
-			return c*2**(10*(t/d-1)+b)
+			return c * 2**(10*(t/d - 1)) + b
 
 
 """
