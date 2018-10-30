@@ -145,7 +145,7 @@ if __name__ == '__main__':
         cap = cv2.VideoCapture(0)  # 引数はカメラのデバイス番号
         # 解像度高まるがfpsが低くなってしまう
         cap.set(6,cv2.VideoWriter_fourcc(*'MJPG'))
-        cap.set(5,10)
+        cap.set(5,30)
         cap.set(4,1944)
         cap.set(3,2592)
 
