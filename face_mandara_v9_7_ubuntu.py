@@ -157,6 +157,8 @@ if __name__ == '__main__':
             # まだ結果が出ていないなら
             if not similar_paths_manager:
                 frame = cv2.flip(frame, 1)
+                frame = frame[:, :, ::-1].copy()
+                frame = Image.fromarray(frame)
                 frame = frame.resize((frame.width*2, frame.height*2))
                 cv2.imshow('FaceMandara', frame)
                 k = cv2.waitKey(1)
