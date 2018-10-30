@@ -72,6 +72,9 @@ def recommend_faces(similar_paths_manager, frame_manager, face_rect_manager, sim
 
         # 顔認識できなかったときcontinue
         if not rects:
+            face_rect_manager[:] = []
+            similar_paths_manager[:] = []
+            similar_distance_manager[:] = []
             print("cant recognize faces")
             continue
 
