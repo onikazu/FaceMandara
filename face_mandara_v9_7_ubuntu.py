@@ -200,11 +200,14 @@ if __name__ == '__main__':
                 print("something occured2")
 
             if similar_distance_manager:
-                distance = similar_distance_manager[0]
-                distance_no1 = distance[0][0]
-                distance_no2 = distance[0][1]
-                distance_no3 = distance[0][2]
-                distance_worst = distance[0][-1]
+                try:
+                    distance = similar_distance_manager[0]
+                    distance_no1 = distance[0][0]
+                    distance_no2 = distance[0][1]
+                    distance_no3 = distance[0][2]
+                    distance_worst = distance[0][-1]
+                except:
+                    pass
 
             # インスタンス作成
             # similar_windows = 二重リスト
