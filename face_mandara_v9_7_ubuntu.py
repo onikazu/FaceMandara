@@ -323,7 +323,8 @@ if __name__ == '__main__':
                         face_frames[i].left = face_rect_manager[i][2]
                         face_frames[i].right = face_rect_manager[i][3]
                     except:
-                        continue
+                        # 途中のアクションは継続する
+                        pass
 
                 # フレームデータのPIL変換
                 frame = frame[:, :, ::-1].copy()
