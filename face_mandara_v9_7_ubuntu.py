@@ -358,8 +358,8 @@ if __name__ == '__main__':
                             x = easing.easing(t, face_frame_center_x, similar_windows[i][j].movement_amount_x, end_frame_num, easing_type)
                             y = easing.easing(t, face_frame_center_y, similar_windows[i][j].movement_amount_y, end_frame_num, easing_type)
                         else:
-                            x = easing.easing(t%wait_frame_num, similar_windows[i][j].movement_amount_x, face_frame_center_x, end_frame_num, easing_type)
-                            y = easing.easing(t%wait_frame_num, similar_windows[i][j].movement_amount_y, face_frame_center_y, end_frame_num, easing_type)
+                            x = easing.easing(t, face_frame_center_x+similar_windows[i][j].movement_amount_x, -similar_windows[i][j].movement_amount_x, end_frame_num, easing_type)
+                            y = easing.easing(t, face_frame_center_y+similar_windows[i][j].movement_amount_y, -similar_windows[i][j].movement_amount_y,end_frame_num, easing_type)
 
 
                         # 情報更新・直線描画
