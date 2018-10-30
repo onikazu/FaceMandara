@@ -1,5 +1,6 @@
 """
 プロセス開始時にspawnを指定
+（こちらでは動きません。画像のパスが違います）
 """
 # ライブラリインポート
 import multiprocessing as mp
@@ -151,6 +152,9 @@ if __name__ == '__main__':
 
             # まだ結果が出ていないなら
             if not similar_paths_manager:
+                frame = cv2.flip(frame, 1)
+                cv2.imshow('FaceMandara', frame)
+                k = cv2.waitKey(1)
                 continue
 
             # 類似顔を入れておく配列
@@ -162,7 +166,7 @@ if __name__ == '__main__':
                 for i in range(len(similar_paths_manager)):
                     images = []
                     for j in range(len(similar_paths_manager[i])):
-                        images.append(Image.open("./big_database/{}".format(similar_paths_manager[i][j])))
+                        images.append(Image.open("./database/{}".format(similar_paths_manager[i][j])))
                     all_images.append(images)
             except:
                 print("something occured1")
