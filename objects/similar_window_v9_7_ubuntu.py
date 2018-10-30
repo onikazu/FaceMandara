@@ -57,7 +57,7 @@ class SimilarWindow:
         frame_width = frame.width
         window_height = 218
         window_width = 178
-        image = self._num_ride(self.image, self.distance)
+        image = self.image
 
         try:
             #後ほど見切れたときの処理を書く
@@ -97,6 +97,8 @@ class SimilarWindow:
 
             # 類似顔の大きさ変更（縮尺変更）
             image_resized = image.resize((window_width, window_height))
+            # 順位挿入
+            image_resized = self._num_ride(image_resized, self.similar_num)
             # 正方形にトリミング
             image_trimmed = image_resized.crop((0, (window_height-window_width)/2, window_width, (window_height-window_width)/2+window_width))
             # 枠は5pixの太さにする
@@ -134,14 +136,14 @@ class SimilarWindow:
         self.time += 1
         return frame
 
-    def _num_ride(self, image, distance):
+    def _num_ride(self, image, num):
         try:
             image_num = image.copy()
         except:
             image_num = image
         # ドロワー
         draw = ImageDraw.Draw(image_num)
-        distance_text = round(distance, self.time%25)
+        distance_text = round(num, self.time%25)
         w = image.width
         h = image.height
         padding = 10
@@ -149,12 +151,8 @@ class SimilarWindow:
         font = ImageFont.truetype("arial.ttf", 17)
         print("in _num_ride")
         try:
-
-            draw.text((0, h/2), str(distance_text), font=font, fill=(255,0,0,128))
+            draw.text((w/2, h*(2/3)), str(distance_text), font=font, fill=(255,0,0,128))
         except:
-            print("im in except")
-            print("h:", type(h), h)
-            print("distance_text: ", type(distance_text), distance_text)
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback,
                               limit=2, file=sys.stdout)
