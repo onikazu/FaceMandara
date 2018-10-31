@@ -22,8 +22,6 @@ class Line:
         """
         rect = (left, top, right, bottom)
         """
-        print("x0, y0, x1, y1", self.x0, self.y0, self.x1, self.y1)
-        print("cross_x, cross_y", self.cross_x, self.cross_y)
         left, top, right, bottom = rect
         circle_center_x = left + (right-left) / 2
         circle_center_y = top + (bottom-top) / 2
@@ -50,7 +48,10 @@ class Line:
 
         draw = ImageDraw.Draw(frame)
         draw.line((self.cross_x, self.cross_y, self.x1, self.y1), fill=(255, 255, 255), width=1)
-        print("line drew:{},{},{},{}".format(self.x0, self.y0, self.x1, self.y1))
+
+        # 真下に出てくるもののみログを表示
+        if self.movement_amount_x == 0:
+            print("line drew:{},{},{},{}".format(self.x0, self.y0, self.x1, self.y1))
 
     def setter(self, x0, y0, x1, y1):
         self.x0 = int(x0)

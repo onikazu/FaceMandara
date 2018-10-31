@@ -1,6 +1,6 @@
 """
 プロセス開始時にspawnを指定
-（こちらでは動きません。画像のパスが違います）
+（macbookでは動きません。画像のパスが違います）
 """
 # ライブラリインポート
 import multiprocessing as mp
@@ -113,12 +113,9 @@ def recommend_faces(similar_paths_manager, frame_manager, face_rect_manager, sim
             D, I = index.search(target_vector, k)
             for i in range(1, len(I[0])):
                 similar_paths.append(face_image_names[I[0][i]])
-            print("I", I)
-            print(similar_paths)
 
             print("finish about one face")
             # 画像パスの保存(何らかの問題あり)
-            print("similar_paths", similar_paths)
             similar_paths_manager.append(similar_paths)
 
         # 距離の保存
@@ -143,11 +140,11 @@ if __name__ == '__main__':
         recommend_process.start()
         start_time = time.time()
         cap = cv2.VideoCapture(0)  # 引数はカメラのデバイス番号
-        # 解像度高まるがfpsが低くなってしまう
+
         cap.set(6,cv2.VideoWriter_fourcc(*'MJPG'))
-        cap.set(5,30)
-        cap.set(4,1944)
-        cap.set(3,2592)
+        cap.set(5,30)　# fps
+        cap.set(4,1944) # height
+        cap.set(3,2592) # width
 
         # 撮影の開始
         while True:
@@ -225,7 +222,6 @@ if __name__ == '__main__':
             for i in range(len(face_rect_manager)):
                 similar_windows_one_rect = []
                 lines_for_one_rect = []
-                print("i", i)
                 for j in range(len(all_images[i])):
                     print("j", j)
                     # 真下
@@ -314,7 +310,6 @@ if __name__ == '__main__':
                         distance[0][i] = distance[0][i] + random.uniform(0, 0.00000001)
                     cv2.putText(frame, "distances",(30, 75), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
                     for i in range(len(distance[0])):
-                        print("distance", distance[0][i])
                         d = round(distance[0][i], similar_windows[0][0].time%20)
                         cv2.putText(frame, str(d),(30, 100+25*i), font, 0.5,(255,255,255),2,cv2.FONT_HERSHEY_TRIPLEX)
                 except:
