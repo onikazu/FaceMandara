@@ -371,12 +371,23 @@ if __name__ == '__main__':
                         lines[i][j].draw_line(frame, rect)
 
                         # 欄外に%データの表示
-                        if j<3:
-                            draw = ImageDraw.Draw(frame)
-                            radius = similar_windows[i][j].get_radius()
-                            font = ImageFont.truetype("arial.ttf", int(radius*(1/3)))
-                            d = round(distance[i][j], similar_windows[i][j].time%10)
-                            draw.text((int(x-radius*1.5), y+radius), str((1-d)*100)+"%", font=font, fill=(255,255,255,128))
+                        try:
+                            if j<3:
+                                draw = ImageDraw.Draw(frame)
+                                radius = similar_windows[i][j].get_radius()
+                                font = ImageFont.truetype("arial.ttf", int(radius*(1/3)))
+                                d = round(distance[i][j], similar_windows[i][j].time%10)
+                                draw.text((int(x-radius*1.5+1), y+radius+1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
+                                draw.text((int(x-radius*1.5+1), y+radius-1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
+                                draw.text((int(x-radius*1.5+1), y+radius), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
+                                draw.text((int(x-radius*1.5-1), y+radius+1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
+                                draw.text((int(x-radius*1.5-1), y+radius-1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
+                                draw.text((int(x-radius*1.5-1), y+radius), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
+                                draw.text((int(x-radius*1.5), y+radius+1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
+                                draw.text((int(x-radius*1.5), y+radius-1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
+                                draw.text((int(x-radius*1.5), y+radius), str((1-d)*100)+"%", font=font, fill=(255,255,255,128))
+                            except:
+                                pass
 
                         x = int(x)
                         y = int(y)
