@@ -142,7 +142,7 @@ if __name__ == '__main__':
         cap = cv2.VideoCapture(0)  # 引数はカメラのデバイス番号
 
         cap.set(6,cv2.VideoWriter_fourcc(*'MJPG'))
-        cap.set(5,30)　# fps
+        cap.set(5,30)
         cap.set(4,1944) # height
         cap.set(3,2592) # width
 
