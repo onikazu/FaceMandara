@@ -225,30 +225,56 @@ if __name__ == '__main__':
                 lines_for_one_rect = []
                 for j in range(len(all_images[i])):
                     print("j", j)
-                    # 真下
-                    if  j == 0:
-                        amount_movement_x = 0
-                        amount_movement_y = 180
-                    # 真左
-                    elif j == 1:
-                        amount_movement_x = -210
-                        amount_movement_y = 0
-                    # 真右
-                    elif j == 2:
-                        amount_movement_x = 210
-                        amount_movement_y = 0
-                    elif j== 3:
-                        amount_movement_x = 150
-                        amount_movement_y = 140
-                    elif j == 4:
-                        amount_movement_x = -150
-                        amount_movement_y = 140
-                    elif j == 5:
-                        amount_movement_x = 120
-                        amount_movement_y = 20
+                    if len(face_rect_manager) != 1:
+                        # 真下
+                        if  j == 0:
+                            amount_movement_x = 0
+                            amount_movement_y = 180
+                        # 真左
+                        elif j == 1:
+                            amount_movement_x = -210
+                            amount_movement_y = 0
+                        # 真右
+                        elif j == 2:
+                            amount_movement_x = 210
+                            amount_movement_y = 0
+                        elif j== 3:
+                            amount_movement_x = 150
+                            amount_movement_y = 140
+                        elif j == 4:
+                            amount_movement_x = -150
+                            amount_movement_y = 140
+                        elif j == 5:
+                            amount_movement_x = 120
+                            amount_movement_y = 20
+                        else:
+                            amount_movement_x = -120
+                            amount_movement_y = 20
                     else:
-                        amount_movement_x = -120
-                        amount_movement_y = 20
+                        # 真下
+                        if  j == 0:
+                            amount_movement_x = 0
+                            amount_movement_y = 360
+                        # 真左
+                        elif j == 1:
+                            amount_movement_x = -420
+                            amount_movement_y = 0
+                        # 真右
+                        elif j == 2:
+                            amount_movement_x = 420
+                            amount_movement_y = 0
+                        elif j== 3:
+                            amount_movement_x = 300
+                            amount_movement_y = 280
+                        elif j == 4:
+                            amount_movement_x = -300
+                            amount_movement_y = 280
+                        elif j == 5:
+                            amount_movement_x = 240
+                            amount_movement_y = 40
+                        else:
+                            amount_movement_x = -240
+                            amount_movement_y = 40
 
                     sw = similar_window_v9_7_ubuntu.SimilarWindow(distance=distance_no1, \
                     place=[0, 0], image=all_images[i][j], \
