@@ -376,7 +376,7 @@ if __name__ == '__main__':
                                 draw = ImageDraw.Draw(frame)
                                 radius = similar_windows[i][j].get_radius()
                                 font = ImageFont.truetype("arial.ttf", int(radius*(1/3)))
-                                d = distance[i][j].copy()
+                                d = distance[i][j]
                                 d = round(d, 5)
                                 print(similar_windows[i][j].time%10)
                                 print("d:{}".format(d))
