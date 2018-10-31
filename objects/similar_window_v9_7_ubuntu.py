@@ -162,7 +162,7 @@ class SimilarWindow:
             else:
                 cup = Image.open("./objects/cup.jpg")
                 cup = cup.resize((17, 17))
-                image_num.paste(cup, (w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2, w*(1/2)-self.similar_num*3+17, h*(2/3)+self.similar_num*2+17))
+                image_num.paste(cup, (int(w*(1/2)-self.similar_num*3), int(h*(2/3)+self.similar_num*2), int(w*(1/2)-self.similar_num*3+17), int(h*(2/3)+self.similar_num*2+17)))
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback,
