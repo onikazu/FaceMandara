@@ -33,19 +33,8 @@ class Line:
         self.cross_y = radius*math.sin(theta)+circle_center_y
 
         if ((self.x1-circle_center_x)**2+(self.y1-circle_center_y))<radius**2:
-            print("領域外のため描画せず.パラメータ:{}".format((self.x1-circle_center_x)**2+(self.y1-circle_center_y))
+            print("領域外のため描画せず.パラメータ:{}".format((self.x1-circle_center_x)**2+(self.y1-circle_center_y)))
             return
-
-        # # 枠内では線を表示しないようにしてやる
-        # if ((self.x1-circle_center_x)**2+(self.y1-circle_center_y))<radius**2:
-        #     self.cross_x = self.x1
-        #     self.cross_y = self.y1
-        #     return
-        # # フレームと線の交点
-        # if ((self.x1-circle_center_x)**2+(self.y1-circle_center_y))>=radius**2 and self.cross_x == 0:
-        #     self.cross_x = (self.cross_x+self.x1)/2
-        #     self.cross_y = (self.cross_y+self.y1)/2
-        #     return
 
         draw = ImageDraw.Draw(frame)
         draw.line((self.cross_x, self.cross_y, self.x1, self.y1), fill=(255, 255, 255), width=1)
