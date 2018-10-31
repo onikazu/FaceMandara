@@ -160,6 +160,7 @@ class SimilarWindow:
                 draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2-1), "No. "+str(text), font=font, fill=(0,0,0,128))
                 draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(255,255,255,128))
             else:
+                font = ImageFont.truetype(size=self.similar_num*3)
                 draw.text((w*(1/2)-self.similar_num*3+17, h*(2/3)+self.similar_num*2), "🌏", font=font, fill=(255,255,255,128))
                 # cup = Image.open("./objects/cup.jpg")
                 # cup = cup.resize((17, 17))
