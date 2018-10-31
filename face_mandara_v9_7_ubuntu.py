@@ -386,8 +386,8 @@ if __name__ == '__main__':
                                 draw.text((int(x-radius*1.5), y+radius+1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
                                 draw.text((int(x-radius*1.5), y+radius-1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
                                 draw.text((int(x-radius*1.5), y+radius), str((1-d)*100)+"%", font=font, fill=(255,255,255,128))
-                            except:
-                                pass
+                        except:
+                            pass
 
                         x = int(x)
                         y = int(y)
