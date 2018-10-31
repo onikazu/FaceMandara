@@ -250,6 +250,12 @@ if __name__ == '__main__':
                         else:
                             amount_movement_x = -120
                             amount_movement_y = 20
+                        sw = similar_window_v9_7_ubuntu.SimilarWindow(distance=distance_no1, \
+                        place=[0, 0], image=all_images[i][j], \
+                        similar_num=len(all_images[i])-j, \
+                        movement_amount=(amount_movement_x, amount_movement_y)
+                        lonly = False)
+
                     else:
                         # 真下
                         if  j == 0:
@@ -275,11 +281,13 @@ if __name__ == '__main__':
                         else:
                             amount_movement_x = -240
                             amount_movement_y = 40
+                        sw = similar_window_v9_7_ubuntu.SimilarWindow(distance=distance_no1, \
+                        place=[0, 0], image=all_images[i][j], \
+                        similar_num=len(all_images[i])-j, \
+                        movement_amount=(amount_movement_x, amount_movement_y), \
+                        lonly = True)
 
-                    sw = similar_window_v9_7_ubuntu.SimilarWindow(distance=distance_no1, \
-                    place=[0, 0], image=all_images[i][j], \
-                    similar_num=len(all_images[i])-j, \
-                    movement_amount=(amount_movement_x, amount_movement_y))
+
                     similar_windows_one_rect.append(sw)
                     li = line_v3.Line(movement_amount_x=amount_movement_x, movement_amount_y=amount_movement_y)
                     lines_for_one_rect.append(li)
