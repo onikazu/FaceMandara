@@ -25,7 +25,7 @@ import easing
 
 
 class SimilarWindow:
-    def __init__(self, distance, place, image, movement_amount, rect=[0,0,0,0], time=0, similar_num=0):
+    def __init__(self, distance, place, image, movement_amount, rect=[0,0,0,0], time=0, similar_num=0, lonly=True):
         """
         distances : float
         place : list[y, x] ウィンドウを表示させたい左上の座標
@@ -46,6 +46,7 @@ class SimilarWindow:
         self.image_frame = Image.open("./objects/frame_square.png")
         self.movement_amount_x, self.movement_amount_y = movement_amount
         self.radius = 0
+        self.lonly = lonly
 
     def put_on_frame(self, frame, place):
         """
@@ -90,9 +91,12 @@ class SimilarWindow:
             else:
                 easing_num = easing.easing(t%wait_frame_num, 1, -1, end_frame_num, "ease_out_expo")
 
-
-            window_width = int(window_width * (self.similar_num/10)*easing_num)
-            window_height = int(window_height * (self.similar_num/10)*easing_num)
+            if lonly:
+                window_width = int(window_width * (self.similar_num/10)*easing_num*1.5)
+                window_height = int(window_height * (self.similar_num/10)*easing_num*1.5)
+            else:
+                window_width = int(window_width * (self.similar_num/10)*easing_num)
+                window_height = int(window_height * (self.similar_num/10)*easing_num)
 
             # 類似顔の大きさ変更（縮尺変更）
             image_resized = image.resize((window_width, window_height))
