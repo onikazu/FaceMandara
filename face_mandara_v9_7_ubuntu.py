@@ -142,7 +142,8 @@ if __name__ == '__main__':
         cap = cv2.VideoCapture(0)  # 引数はカメラのデバイス番号
 
         # cap.set(6,cv2.VideoWriter_fourcc(*'MJPG')) # 対応していない模様
-        cap.set(5,30)
+        # パラメータを最大以上に上げてしまうとバグが発生する
+        cap.set(5,30) # fps
         cap.set(4,1944) # height
         cap.set(3,2592) # width
 
