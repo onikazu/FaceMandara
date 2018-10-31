@@ -84,7 +84,7 @@ class SimilarWindow:
         try:
             t = self.time
             if t < end_frame_num:
-                easing_num = easing.easing(t, 0, 1, end_frame_num, "ease_in_expo")
+                easing_num = easing.easing(t, 0, 1, end_frame_num, "ease_out_expo")
             elif t < wait_frame_num:
                 t = end_frame_num
                 easing_num = easing.easing(t, 0, 1, end_frame_num, "ease_in_expo")
