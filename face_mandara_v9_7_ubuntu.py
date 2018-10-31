@@ -253,7 +253,7 @@ if __name__ == '__main__':
                         sw = similar_window_v9_7_ubuntu.SimilarWindow(distance=distance_no1, \
                         place=[0, 0], image=all_images[i][j], \
                         similar_num=len(all_images[i])-j, \
-                        movement_amount=(amount_movement_x, amount_movement_y)
+                        movement_amount=(amount_movement_x, amount_movement_y), \
                         lonly = False)
 
                     else:
