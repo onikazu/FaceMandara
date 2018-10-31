@@ -37,7 +37,7 @@ for k in datas:
     face_vectors.append(datas[k])
 face_vectors = np.array(face_vectors).astype("float32")
 
-# faissを用いたPQの準備
+# faissを用いたPQ
 nlist = 100
 m = 8
 k = 8  # 類似顔7こほしいのでk=8
@@ -373,7 +373,7 @@ if __name__ == '__main__':
                         y = int(y)
                         print("xy",x, y)
                         similar_windows[i][j].put_on_frame(frame=frame, place=[y, x])
-                        print("put", i)
+                        print("ターゲット{}, {}番目の顔".format(i, j))
 
                 # アニメーション終了から15フレーム後に次の検索に入る
                 if similar_windows[0][0].time >= end_frame_num*2+wait_frame_num:
