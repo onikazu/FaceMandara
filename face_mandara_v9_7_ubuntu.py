@@ -376,7 +376,7 @@ if __name__ == '__main__':
                                 draw = ImageDraw.Draw(frame)
                                 radius = similar_windows[i][j].get_radius()
                                 font = ImageFont.truetype("arial.ttf", int(radius*(1/3)))
-                                d = round(distance[j], 5)
+                                d = round(distance[i][j], 5)
                                 print("d:{}".format(d))
                                 draw.text((int(x-radius*1.5+1), y+radius+1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
                                 draw.text((int(x-radius*1.5+1), y+radius-1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
@@ -388,7 +388,10 @@ if __name__ == '__main__':
                                 draw.text((int(x-radius*1.5), y+radius-1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
                                 draw.text((int(x-radius*1.5), y+radius), str((1-d)*100)+"%", font=font, fill=(255,255,255,128))
                         except:
-                            pass
+                            print("something is occured in % phase")
+                            exc_type, exc_value, exc_traceback = sys.exc_info()
+                            traceback.print_exception(exc_type, exc_value, exc_traceback,
+                                              limit=2, file=sys.stdout)
 
                         x = int(x)
                         y = int(y)
