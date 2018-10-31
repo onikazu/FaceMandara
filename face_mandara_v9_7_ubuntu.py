@@ -12,7 +12,7 @@ import sys
 import traceback
 import random
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import cv2
 import face_recognition
 import dlib
@@ -369,6 +369,13 @@ if __name__ == '__main__':
                         # 情報更新・直線描画
                         lines[i][j].setter(face_frame_center_x, face_frame_center_y, x, y)
                         lines[i][j].draw_line(frame, rect)
+
+                        # 欄外に%データの表示
+                        if j<3:
+                            draw = ImageDraw.Draw(frame)
+                            font = ImageFont.truetype("arial.ttf", 17)
+                            d = round(distance[i][j], similar_windows[i][j].time%20)
+                            draw.text((x, y), str((1-d)*100)+"%", font=font, fill=(255,255,255,128))
 
                         x = int(x)
                         y = int(y)

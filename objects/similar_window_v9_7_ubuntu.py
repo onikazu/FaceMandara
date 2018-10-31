@@ -149,22 +149,15 @@ class SimilarWindow:
         font = ImageFont.truetype("arial.ttf", self.similar_num*3)
         print("in _num_ride")
         try:
-            if not str(text) == "1":
-                draw.text((w*(1/2)-self.similar_num*3+1, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(0,0,0,128))
-                draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(0,0,0,128))
-                draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2+1), "No. "+str(text), font=font, fill=(0,0,0,128))
-                draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2-1), "No. "+str(text), font=font, fill=(0,0,0,128))
-                draw.text((w*(1/2)-self.similar_num*3+1, h*(2/3)+self.similar_num*2+1), "No. "+str(text), font=font, fill=(0,0,0,128))
-                draw.text((w*(1/2)-self.similar_num*3+1, h*(2/3)+self.similar_num*2-1), "No. "+str(text), font=font, fill=(0,0,0,128))
-                draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2+1), "No. "+str(text), font=font, fill=(0,0,0,128))
-                draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2-1), "No. "+str(text), font=font, fill=(0,0,0,128))
-                draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(255,255,255,128))
-            else:
-                # font = ImageFont.truetype(font="01FontRemix_TT.sit",size=self.similar_num*3)
-                # draw.text((w*(1/2)-self.similar_num*3+17, h*(2/3)+self.similar_num*2), "🌏".encode('utf-8'), fill=(255,255,255,128))
-                cup = Image.open("./objects/cup.jpg")
-                cup = cup.resize((30, 30))
-                image_num.paste(cup, (int(w*(1/2)-self.similar_num*3+10), int(h*(2/3)+self.similar_num*2), int(w*(1/2)-self.similar_num*3+40), int(h*(2/3)+self.similar_num*2+30)))
+            draw.text((w*(1/2)-self.similar_num*3+1, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(0,0,0,128))
+            draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(0,0,0,128))
+            draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2+1), "No. "+str(text), font=font, fill=(0,0,0,128))
+            draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2-1), "No. "+str(text), font=font, fill=(0,0,0,128))
+            draw.text((w*(1/2)-self.similar_num*3+1, h*(2/3)+self.similar_num*2+1), "No. "+str(text), font=font, fill=(0,0,0,128))
+            draw.text((w*(1/2)-self.similar_num*3+1, h*(2/3)+self.similar_num*2-1), "No. "+str(text), font=font, fill=(0,0,0,128))
+            draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2+1), "No. "+str(text), font=font, fill=(0,0,0,128))
+            draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2-1), "No. "+str(text), font=font, fill=(0,0,0,128))
+            draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(255,255,255,128))
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback,
