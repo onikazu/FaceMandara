@@ -149,7 +149,7 @@ class SimilarWindow:
         font = ImageFont.truetype("arial.ttf", self.similar_num*3)
         print("in _num_ride")
         try:
-            if text == "1":
+            if str(text) == "1":
                 draw.text((w*(1/2)-self.similar_num*3+5, h*(2/3)+self.similar_num*2), "🏆", font=font, fill=(255,255,255,128))
             else:
                 draw.text((w*(1/2)-self.similar_num*3+1, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(0,0,0,128))
