@@ -226,7 +226,7 @@ if __name__ == '__main__':
                     print("j", j)
                     # 真下
                     if  j == 0:
-                        amount_movement_x = 0
+                        amount_movement_x = 1
                         amount_movement_y = 180
                     # 真左
                     elif j == 1:
