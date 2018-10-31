@@ -149,9 +149,7 @@ class SimilarWindow:
         font = ImageFont.truetype("arial.ttf", self.similar_num*3)
         print("in _num_ride")
         try:
-            if str(text) == "1":
-                draw.text((w*(1/2)-self.similar_num*3+5, h*(2/3)+self.similar_num*2), "🏆", font=font, fill=(255,255,255,128))
-            else:
+            if not str(text) == "1":
                 draw.text((w*(1/2)-self.similar_num*3+1, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(0,0,0,128))
                 draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(0,0,0,128))
                 draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2+1), "No. "+str(text), font=font, fill=(0,0,0,128))
@@ -161,7 +159,10 @@ class SimilarWindow:
                 draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2+1), "No. "+str(text), font=font, fill=(0,0,0,128))
                 draw.text((w*(1/2)-self.similar_num*3-1, h*(2/3)+self.similar_num*2-1), "No. "+str(text), font=font, fill=(0,0,0,128))
                 draw.text((w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2), "No. "+str(text), font=font, fill=(255,255,255,128))
-
+            else:
+                cup = Image.open("./objects/cup.jpg")
+                cup = cup.resize((17, 17))
+                image_num.paste(cup, (w*(1/2)-self.similar_num*3, h*(2/3)+self.similar_num*2, w*(1/2)-self.similar_num*3+17, h*(2/3)+self.similar_num*2+17))
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback,
