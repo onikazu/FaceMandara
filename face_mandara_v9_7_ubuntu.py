@@ -374,8 +374,8 @@ if __name__ == '__main__':
                         if j<3:
                             draw = ImageDraw.Draw(frame)
                             radius = similar_windows[i][j].get_radius()
-                            font = ImageFont.truetype("arial.ttf", int(radius*(0.5)))
-                            d = round(distance[i][j], similar_windows[i][j].time%20)
+                            font = ImageFont.truetype("arial.ttf", int(radius*(1/3)))
+                            d = round(distance[i][j], similar_windows[i][j].time%10)
                             draw.text((x-radius, y+radius), str((1-d)*100)+"%", font=font, fill=(255,255,255,128))
 
                         x = int(x)
