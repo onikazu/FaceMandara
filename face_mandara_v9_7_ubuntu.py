@@ -377,6 +377,7 @@ if __name__ == '__main__':
                                 radius = similar_windows[i][j].get_radius()
                                 font = ImageFont.truetype("arial.ttf", int(radius*(1/3)))
                                 d = round(distance[i][j], similar_windows[i][j].time%10)
+                                print("similar_windows[i][j].time%10:".format(similar_windows[i][j].time%10))
                                 print("d:{}".format(d))
                                 draw.text((int(x-radius*1.5+1), y+radius+1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
                                 draw.text((int(x-radius*1.5+1), y+radius-1), str((1-d)*100)+"%", font=font, fill=(0,0,0,128))
