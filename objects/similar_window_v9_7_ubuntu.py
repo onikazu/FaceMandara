@@ -45,6 +45,7 @@ class SimilarWindow:
         self.similar_num = similar_num
         self.image_frame = Image.open("./objects/frame_square.png")
         self.movement_amount_x, self.movement_amount_y = movement_amount
+        self.radius = 0
 
     def put_on_frame(self, frame, place):
         """
@@ -117,11 +118,11 @@ class SimilarWindow:
             mask_im = Image.new("L", image_frame_resized.size, 0)
             draw = ImageDraw.Draw(mask_im)
             draw.ellipse((0, 0, image_frame_resized.width, image_frame_resized.height), fill=255)
-            radius = int(image_frame_resized.width/2)
+            self.radius = int(image_frame_resized.width/2)
             # 類似度に応じて拡大、縮小
             # window_size = (int(2*window_width*(self.similar_num/8)), int(2*window_width*(self.similar_num/8)))
             # image = image.resize(window_size)
-            frame.paste(image_frame_resized, (x-radius, y-radius, x-radius+image_frame_resized.width, y-radius+image_frame_resized.height), mask_im)
+            frame.paste(image_frame_resized, (x-self.radius, y-self.radius, x-self.radius+image_frame_resized.width, y-self.radius+image_frame_resized.height), mask_im)
 
 
         except:
@@ -165,3 +166,6 @@ class SimilarWindow:
             print("something happened in _num_ride")
 
         return image_num
+
+    def get_radius(self):
+        return self.radius

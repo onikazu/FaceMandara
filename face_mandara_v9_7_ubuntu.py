@@ -373,9 +373,10 @@ if __name__ == '__main__':
                         # 欄外に%データの表示
                         if j<3:
                             draw = ImageDraw.Draw(frame)
-                            font = ImageFont.truetype("arial.ttf", 17)
+                            radius = similar_windows[i][j].get_radius()
+                            font = ImageFont.truetype("arial.ttf", radius*(0.5))
                             d = round(distance[i][j], similar_windows[i][j].time%20)
-                            draw.text((x, y), str((1-d)*100)+"%", font=font, fill=(255,255,255,128))
+                            draw.text((x-radius, y+radius), str((1-d)*100)+"%", font=font, fill=(255,255,255,128))
 
                         x = int(x)
                         y = int(y)
